@@ -222,40 +222,17 @@ public class Page implements Initializable {
     TextArea infoTextArea;
 
     @FXML
-    private void displayInformation (ActionEvent event){
+    private void displayInformation (){
         selectedEmployee = table.getSelectionModel().getSelectedItem();
         infoTextArea.setText(selectedEmployee.toString() + "\n");
     }
+
     public  Employee getSelectedEmployee(){
         return selectedEmployee;
     }
 
     public void profilePage(ActionEvent event) throws IOException {
-//        int employeeNum = table.getSelectionModel().getSelectedItem().getEmployeeNumber();
-//        String fName =table.getSelectionModel().getSelectedItem().getFirstName();
-//        String lName =table.getSelectionModel().getSelectedItem().getLastName();
-//        String email =table.getSelectionModel().getSelectedItem().getEmail();
-//        String jTitle =table.getSelectionModel().getSelectedItem().getJobTitle();
-       // int reportsTo =table.getSelectionModel().getSelectedItem().getReportsTo();
-//        int reportsTo =table.getSelectionModel().getSelectedItem().getReportsTo();
-//        ProfileController profileController=getClass().getCo
-//       // profileController.setFields(employeeNum,fName,lName,jTitle,email,reportsTo);
-//        profileController.employeeNumbers=table.getSelectionModel().getSelectedItem().getEmployeeNumber();
-//        StartProgram.setRoot("Profile");
-//        profileController.employee=new Employee(employeeNum,fName,lName,jTitle,email,reportsTo);
-//        profileController.employeeNumber.setText(String.valueOf(employeeNum));
-
-//        profileController.employeeNumbers=table.getSelectionModel().getSelectedItem().getEmployeeNumber();
-
-//
-//        FXMLLoader fxmlLoader = new FXMLLoader(StartProgram.class.getResource("Profile.fxml"));
-//        Parent root=fxmlLoader.load();
-//        ProfileController controller=fxmlLoader.getController();
-//        controller.setFields(employeeNum,fName,lName,jTitle,email,reportsTo);
-//        controller.employee=new Employee(employeeNum,fName,lName,jTitle,email,reportsTo);
-//        Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-//        Scene  scene = new Scene(root);
-//        stage.setScene(scene);
+        selectedEmployee = table.getSelectionModel().getSelectedItem();
        try { if(selectedEmployee == null){
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.initModality(Modality.APPLICATION_MODAL);
@@ -271,8 +248,24 @@ public class Page implements Initializable {
         catch (IOException e){
         e.printStackTrace();
     }
+
     }
+
+    //add  Employee
     public void addEmployeePage () throws IOException {
-        StartProgram.setRoot("AddEmployee");
+        Parent root;
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(StartProgram.class.getResource("AddEmployee.fxml"));
+            root = fxmlLoader.load();
+            Stage stage = new Stage();
+            stage.setTitle("New Employee");
+            stage.setScene(new Scene(root, 600, 550));
+            stage.setResizable(false);
+            stage.show();
+            // Hide this current window (if this is what you want)
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

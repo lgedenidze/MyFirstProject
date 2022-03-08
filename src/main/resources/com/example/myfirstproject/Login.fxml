@@ -7,26 +7,25 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-
-<AnchorPane prefHeight="658.0" prefWidth="894.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.myfirstproject.Login">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="550.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.myfirstproject.Login">
    <children>
-      <Label layoutX="393.0" layoutY="210.0" text="Username">
+      <Label layoutX="261.0" layoutY="214.0" text="Username">
          <font>
             <Font size="14.0" />
          </font>
       </Label>
-      <TextField fx:id="userName" layoutX="358.0" layoutY="239.0" />
-      <Label layoutX="393.0" layoutY="265.0" prefHeight="27.0" prefWidth="80.0" text="Password ">
+      <TextField fx:id="userName" layoutX="226.0" layoutY="243.0" maxHeight="26.0" maxWidth="150.0" minHeight="26.0" minWidth="150.0" prefHeight="26.0" prefWidth="150.0" />
+      <Label layoutX="261.0" layoutY="269.0" prefHeight="27.0" prefWidth="80.0" text="Password ">
          <font>
             <Font size="14.0" />
          </font>
       </Label>
-      <Button fx:id="loginButton" layoutX="409.0" layoutY="326.0" mnemonicParsing="false" onAction="#signIn" text="Login" />
-      <Label fx:id="resultLabel" layoutX="166.0" layoutY="316.0" prefHeight="18.0" prefWidth="342.0" textFill="#ff1010" />
-      <PasswordField fx:id="password" layoutX="357.0" layoutY="292.0" minHeight="-Infinity" minWidth="-Infinity" />
-      <Label layoutX="240.0" layoutY="89.0" prefHeight="86.0" prefWidth="413.0" text="Welcome To Employee Managment" textFill="#080808" AnchorPane.bottomAnchor="482.6" AnchorPane.leftAnchor="240.0" AnchorPane.rightAnchor="240.39999999999998" AnchorPane.topAnchor="89.0">
+      <Label fx:id="resultLabel" layoutX="151.0" layoutY="333.0" prefHeight="18.0" prefWidth="342.0" textFill="#ff1010" />
+      <PasswordField fx:id="password" layoutX="225.0" layoutY="296.0" minHeight="-Infinity" minWidth="-Infinity" />
+      <Button fx:id="loginButton" layoutX="277.0" layoutY="373.0" mnemonicParsing="false" onAction="#signIn" text="Login" />
+      <Label layoutX="150.0" layoutY="137.0" text="Welcome To Employee Managment">
          <font>
-            <Font name="SansSerif Regular" size="22.0" />
+            <Font name="Microsoft Sans Serif" size="19.0" />
          </font>
       </Label>
    </children>

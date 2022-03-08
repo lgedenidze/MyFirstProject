@@ -7,7 +7,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.paint.Color;
 
-import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -29,25 +28,18 @@ public class AddEmployeeController implements Initializable {
     @FXML
     private TextField lastNameTextField;
 
-    @FXML
-    private ChoiceBox<Integer> managerIdChoose;
 
     @FXML
     private ChoiceBox<Integer> officeChose;
 
-    @FXML
-    private Button saveButton;
 
     @FXML
     private Label resultLabel;
 
-
-
-
-
-
+//start Program
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        //for Choice filed
         ObservableList<Integer>officeChoseChooseObsList=FXCollections.observableArrayList();
         ObservableList<String>jobTitleChooseObsList=FXCollections.observableArrayList();
         String jobQuery="select\n" +
@@ -77,6 +69,8 @@ public class AddEmployeeController implements Initializable {
         }
 
     }
+    //save button logic
+
     public void saveMethods() {
         DataBase dataBase = new DataBase();
         Connection con = dataBase.getConnections();
@@ -126,15 +120,4 @@ public class AddEmployeeController implements Initializable {
         }
 
     }
-    @FXML
-
-    public void signOut () throws IOException {
-        StartProgram.signOut();
-    }
-    @FXML
-
-    public void goBack() throws Exception{
-        StartProgram.setRoot("WelcomePage");
-    }
-
 }
