@@ -4,6 +4,7 @@ import com.mysql.cj.log.Log;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -11,14 +12,21 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
+import java.net.URL;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.Objects;
+import java.util.ResourceBundle;
 
-public class Login {
+
+public class Login implements Initializable {
+    @FXML
+    ImageView logo;
     @FXML
     TextField userName;
     @FXML
@@ -70,5 +78,9 @@ public class Login {
     }
 
 
-
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        Image logos =new Image("C:\\Users\\gedena\\IdeaProjects\\FirstProject\\src\\main\\resources\\com\\example\\myfirstproject\\Pictures\\logo-light.png");
+        logo.setImage(logos);
+     }
 }

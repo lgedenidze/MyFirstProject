@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
@@ -18,10 +19,11 @@ public class StartProgram extends Application {
 
 
         FXMLLoader fxmlLoader = new FXMLLoader(StartProgram.class.getResource("login.fxml"));
-        scene = new Scene(fxmlLoader.load(),600,550,Color.YELLOW);
+        scene = new Scene(fxmlLoader.load());
         stage.setTitle("Employee Management");
         stage.sizeToScene();
-
+        Image icon=new Image("C:\\Users\\gedena\\IdeaProjects\\FirstProject\\src\\main\\resources\\com\\example\\myfirstproject\\Pictures\\icon.png");
+        stage.getIcons().add(icon);
         // Image image = new Image("C:\\Users\\gedena\\Desktop\\jinx.png");
         //stage.getIcons().add(ima.ge);
         stage.setScene(scene);

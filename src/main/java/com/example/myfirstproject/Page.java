@@ -14,6 +14,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.skin.TableHeaderRow;
+import javafx.scene.image.Image;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -262,6 +263,8 @@ public class Page implements Initializable {
             stage.setScene(new Scene(root, 600, 550));
             stage.setResizable(false);
             stage.show();
+            Image icon=new Image("C:\\Users\\gedena\\IdeaProjects\\FirstProject\\src\\main\\resources\\com\\example\\myfirstproject\\Pictures\\icon.png");
+            stage.getIcons().add(icon);
             // Hide this current window (if this is what you want)
         }
         catch (IOException e) {

@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="809.0" prefWidth="1148.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.myfirstproject.ProfileController">
+<AnchorPane prefHeight="809.0" prefWidth="1148.0" style="-fx-background-color: #6A8A82;" stylesheets="@../../../CSS/style.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.myfirstproject.ProfileController">
    <children>
       <TableView fx:id="customersTable" layoutX="44.0" layoutY="258.0" prefHeight="438.0" prefWidth="1032.0" AnchorPane.bottomAnchor="120.60000000000002" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="250.0">
         <columns>
@@ -68,7 +68,7 @@
             <Font size="16.0" />
          </font>
       </Label>
-      <Button fx:id="editManagerButton" layoutX="329.0" layoutY="181.0" mnemonicParsing="false" onAction="#editManager" text="Edit Manager" visible="false" />
+      <Button fx:id="editManagerButton" layoutX="245.0" layoutY="181.0" mnemonicParsing="false" onAction="#editManager" prefHeight="22.0" prefWidth="144.0" text="Edit Manager" />
       <Label fx:id="employeeNumber" layoutX="161.0" layoutY="61.0" prefHeight="20.0" prefWidth="119.0">
          <font>
             <Font size="14.0" />
@@ -99,7 +99,7 @@
             <Font size="14.0" />
          </font>
       </Label>
-      <MenuBar prefHeight="26.0" prefWidth="1162.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <MenuBar prefHeight="0.0" prefWidth="1148.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <menus>
           <Menu mnemonicParsing="false" text="File">
             <items>
@@ -111,6 +111,6 @@
         </menus>
       </MenuBar>
       <ChoiceBox fx:id="managerIdChoiceBox" layoutX="380.0" layoutY="86.0" prefHeight="26.0" prefWidth="67.0" visible="false" />
-      <Button fx:id="deleteEmployeeButton" layoutX="440.0" layoutY="181.0" mnemonicParsing="false" onAction="#deleteEmp" text="Delete" />
+      <Button fx:id="deleteEmployeeButton" layoutX="414.0" layoutY="181.0" mnemonicParsing="false" onAction="#deleteEmp" text="Delete" />
    </children>
 </AnchorPane>

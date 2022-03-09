@@ -1,0 +1,71 @@
+
+.button {
+    -fx-background-color:
+        rgba(0,0,0,0.08),
+        linear-gradient(#9a9a9a, #909090),
+        linear-gradient(white 0%, #f3f3f3 50%, #ececec 51%, #f2f2f2 100%);
+    -fx-background-insets: 0 0 -1 0,0,1;
+    -fx-background-radius: 5,5,4;
+    -fx-padding: 3 30 3 30;
+    -fx-text-fill: #242d35;
+    -fx-font-size: 14px;
+    -fx-background-color:#b7b7b7;
+    -fx-font-family: "Serif";
+
+}
+.text-field{
+     -fx-background-color: #e1dcdc;
+}
+
+.table-view .column-header-background{
+    -fx-background-color: linear-gradient(to bottom, #3b2f2f,#3b2f2f );
+    -fx-text-fill: black;
+
+
+}
+
+.table-view {
+    -fx-background-color: #e1dcdc;
+}
+
+.table-view .column-header-background .filler {
+    -fx-background-color: #3b2f2f;
+     -fx-text-fill: #3b2f2f;
+
+}
+.table-view .corner {
+    -fx-background-color: #3b2f2f;
+}
+
+
+.table-view .column-header {
+    -fx-background-color: #3b2f2f;
+    -fx-text-fill: #3b2f2f;
+
+}
+
+.table-view .table-cell{
+    -fx-border-color: #3b2f2f;
+    -fx-padding: 2 0 2 10px;
+}
+
+.label{
+  -fx-font-family: "Serif";
+  -fx-text-fill: #f1f3f2;
+}
+#textarea{
+-fx-background-color: #e1dcdc;
+}
+.menu-bar{
+-fx-background-color: #585A56;
+}
+.anchor-pane{
+-fx-background-color: #6A8A82;
+}
+.choice-box{
+ -fx-background-color:#b7b7b7;
+}
+.choice-box .label { -fx-text-fill: black; }
+
+.menu-bar .menu .label{-fx-text-fill: black;
+}
