@@ -49,4 +49,18 @@ public class StartProgram extends Application {
         setRoot("Login");
     }
 
+    public static Stage newPage (String fxml,String Title) throws IOException {
+        Parent root;
+        FXMLLoader fxmlLoader = new FXMLLoader(StartProgram.class.getResource(fxml+".fxml"));
+        root = fxmlLoader.load();
+        Stage stage = new Stage();
+        stage.setTitle(Title);
+        stage.setScene(new Scene(root, 600, 550));
+        stage.show();
+        Image icon=new Image("C:\\Users\\gedena\\IdeaProjects\\FirstProject\\src\\main\\resources\\com\\example\\myfirstproject\\Pictures\\icon.png");
+        stage.getIcons().add(icon);
+        // Hide this current window (if this is what you want)
+        return stage;
+    }
+
 }

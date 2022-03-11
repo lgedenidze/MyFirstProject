@@ -4,25 +4,16 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.skin.TableHeaderRow;
-import javafx.scene.image.Image;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
-import java.sql.Connection;
 import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.ResourceBundle;
 
 public class Page implements Initializable {
@@ -76,12 +67,9 @@ public class Page implements Initializable {
     @Override
 
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        DataBase db=new DataBase();
-        Connection con=db.getConnections();
         String query="select employeeNumber,firstName,lastName,jobTitle,email,reportsTo from employees;";
         try{
-            Statement stm=con.createStatement();
-            ResultSet emp=stm.executeQuery(query);
+            ResultSet emp=DataBase.getResultSet(query);
             while (emp.next()) {
                 Integer queryEmployeeNumber=emp.getInt("employeeNumber");
                 String queryFirstName=emp.getString("firstName");
@@ -102,7 +90,7 @@ public class Page implements Initializable {
             lastName.setCellValueFactory(new PropertyValueFactory<>("lastName"));
             jobTitle.setCellValueFactory(new PropertyValueFactory<>("jobTitle"));
             email.setCellValueFactory(new PropertyValueFactory<>("email"));
-            reportsTo.setCellValueFactory(new PropertyValueFactory<Employee,Integer>("reportsTo"));
+            reportsTo.setCellValueFactory(new PropertyValueFactory<>("reportsTo"));
 
 
             table.setItems(employeeSearchObservableList);
@@ -218,32 +206,28 @@ public class Page implements Initializable {
     }
 
 
-    public static Employee selectedEmployee;
+    private static Employee selectedEmployee;
     @FXML
     TextArea infoTextArea;
 
     @FXML
     private void displayInformation (){
         selectedEmployee = table.getSelectionModel().getSelectedItem();
-        infoTextArea.setText(selectedEmployee.toString() + "\n");
+        if (selectedEmployee!=null)
+        infoTextArea.setText(selectedEmployee + "\n");
     }
 
     public  Employee getSelectedEmployee(){
         return selectedEmployee;
     }
 
-    public void profilePage(ActionEvent event) throws IOException {
+    public void profilePage()  {
         selectedEmployee = table.getSelectionModel().getSelectedItem();
        try { if(selectedEmployee == null){
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.initModality(Modality.APPLICATION_MODAL);
-            alert.setTitle("No Employee is selected!");
-            alert.setHeaderText("Select the employee!");
-            alert.setContentText("To view the profile page of the employee, you have to select them from the table!");
-
-            alert.showAndWait();
+           Alerts.warningInfoAlert("No Employee is selected!",null,
+                   "To view the profile page of the employee, you have to select them from the table!");
         }else {
-            StartProgram.setRoot("Profile");
+            StartProgram.newPage("Profile","Profile Page");
         }
     }
         catch (IOException e){
@@ -254,21 +238,7 @@ public class Page implements Initializable {
 
     //add  Employee
     public void addEmployeePage () throws IOException {
-        Parent root;
-        try {
-            FXMLLoader fxmlLoader = new FXMLLoader(StartProgram.class.getResource("AddEmployee.fxml"));
-            root = fxmlLoader.load();
-            Stage stage = new Stage();
-            stage.setTitle("New Employee");
-            stage.setScene(new Scene(root, 600, 550));
-            stage.setResizable(false);
-            stage.show();
-            Image icon=new Image("C:\\Users\\gedena\\IdeaProjects\\FirstProject\\src\\main\\resources\\com\\example\\myfirstproject\\Pictures\\icon.png");
-            stage.getIcons().add(icon);
-            // Hide this current window (if this is what you want)
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
+        Stage stage=StartProgram.newPage("AddEmployee","Add New Employee");
+        stage.setResizable(false);
     }
 }

@@ -3,7 +3,7 @@ package com.example.myfirstproject;
 import java.sql.*;
 
 public class DataBase {
-    public  Connection con;
+    public static Connection con;
     public Connection getConnection() {
 
       try {
@@ -21,7 +21,7 @@ public class DataBase {
         return  con;
 
     }
-    public Connection getConnections() {
+    public static Connection getConnections() {
 
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -37,6 +37,18 @@ public class DataBase {
         }
         return  con;
 
+    }
+
+    public static ResultSet getResultSet(String Query) throws SQLException {
+        con=DataBase.getConnections();
+        Statement stm=con.createStatement();
+        return stm.executeQuery(Query);
+    }
+
+    public static void updateSelect (String query) throws SQLException{
+        con=DataBase.getConnections();
+        Statement stm=con.createStatement();
+        int countOfUpdate=stm.executeUpdate(query);
     }
 
 }

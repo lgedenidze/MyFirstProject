@@ -4,6 +4,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.chart.PieChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 
@@ -30,8 +31,6 @@ public class ProfileController implements Initializable {
     @FXML
     private Label firstName;
 
-    @FXML
-    private Label jobTitle;
 
     @FXML
     private Label lastName;
@@ -66,6 +65,8 @@ public class ProfileController implements Initializable {
     @FXML
     private Button editManagerButton;
 
+    @FXML
+    private ChoiceBox<String> jobChoice;
     Page page=new Page();
     Employee employee=page.getSelectedEmployee();
 
@@ -75,24 +76,23 @@ public class ProfileController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
-        DataBase dataBase=new DataBase();
-        Connection con= dataBase.getConnections();
         try{
             String query="SELECT salesRepEmployeeNumber,customerNumber,customerName,contactFirstName,contactLastName,city,phone FROM  customers where salesRepEmployeeNumber="+employee.getEmployeeNumber();
-
-            Statement stm=con.createStatement();
-            ResultSet emp=stm.executeQuery(query);
+            String jobQuery = "select\n" +
+                    "jobtitle\n" +
+                    "from jobs where jobTitle not in ('Sales Rep','President') order by 1 desc";
+            ObservableList<String> jobsObsList=FXCollections.observableArrayList();
+            ResultSet emp=DataBase.getResultSet(query);
             while (emp.next()){
-                Integer salesRepEmployeeNumber =emp.getInt("salesRepEmployeeNumber");
-                String customerNumber=emp.getString("customerNumber");
-                String companyName=emp.getString("customerName");
-                String contactFirstName=emp.getString("contactFirstName");
-                String contactLastName=emp.getString("contactLastName");
-                String city=emp.getString("city");
-                String phone=emp.getString("phone");
                 customersObservableList.add(
                         new Customers(
-                                salesRepEmployeeNumber,Integer.parseInt(customerNumber),companyName,contactFirstName,contactLastName,city,phone
+                                emp.getInt("salesRepEmployeeNumber"),
+                                emp.getInt("customerNumber"),
+                                emp.getString("customerName"),
+                                emp.getString("contactFirstName"),
+                                emp.getString("contactLastName"),
+                                emp.getString("city"),
+                                emp.getString("phone")
                         )
                 );}
 
@@ -105,6 +105,11 @@ public class ProfileController implements Initializable {
             cityColum.setCellValueFactory(new PropertyValueFactory<>("city"));
             phoneColum.setCellValueFactory(new PropertyValueFactory<>("phone"));
             customersTable.setItems(customersObservableList);
+            emp=DataBase.getResultSet(jobQuery);
+            while (emp.next()){
+                jobsObsList.add(emp.getString(1));
+            }
+
 
             //SetFileds
 
@@ -112,25 +117,30 @@ public class ProfileController implements Initializable {
             firstName.setText(employee.getFirstName());
             lastName.setText(employee.getLastName());
             email.setText(employee.getEmail());
-            jobTitle.setText(employee.getJobTitle());
+            jobChoice.setValue(employee.getJobTitle());
             managerID.setText(String.valueOf(employee.getReportsTo()));
             managerIdChoiceBox.setValue(employee.getReportsTo());
 
-            if(employee.getJobTitle().equals("Sales Rep")&&employee.getJobTitle().equals("Sales Rep")) {
+            if(employee.getJobTitle().equals("Sales Rep")) {
                 managerIdChoiceBox.setVisible(true);
                 editManagerButton.setVisible(true);
-                String managerQuery = "select distinct reportsTo from employees;";
+                String managerQuery = "select employeeNumber from employees where jobTitle like '%Manager%';";
+
                 ObservableList<Integer> managerObsList = FXCollections.observableArrayList();
-                ResultSet rs = stm.executeQuery(managerQuery);
-                while (rs.next()) {
-                    managerObsList.add(rs.getInt(1));
+                emp = DataBase.getResultSet(managerQuery);
+                while (emp.next()) {
+                    managerObsList.add(emp.getInt(1));
 
                 }
+
                 managerIdChoiceBox.setItems(managerObsList);
             } else {
+                jobsObsList.remove(2);
                 managerIdChoiceBox.setVisible(false);
                 managerID.setVisible(true);
             }
+
+            jobChoice.setItems(jobsObsList);
 
 
 
@@ -172,63 +182,59 @@ public class ProfileController implements Initializable {
 @FXML
     public void deleteEmp(){
         try {
-            DataBase db = new DataBase();
-            Connection cn = db.getConnections();
-            Statement stm = cn.createStatement();
             ObservableList<Integer> employeesLists = FXCollections.observableArrayList();
             String checkEmployees = "select count(employeeNumber) from employees where reportsTo=" + employee.getEmployeeNumber();
             String forChoiceBoxManager = "select employeeNumber from employees where reportsTo=" + employee.getEmployeeNumber();
             String checkCustomers="Select count(*) from customers where salesRepEmployeeNumber="+employee.getEmployeeNumber();
             String forChoiceBoxCustomers="select employeeNumber from employees where reportsTo="+employee.getReportsTo()+" and employeeNumber<>"+employee.getEmployeeNumber();
-            ResultSet resultSetCust = stm.executeQuery(checkCustomers);
+            ResultSet rs = DataBase.getResultSet(checkCustomers);
             int resultCust = 0;
-            while (resultSetCust.next()){
-                resultCust=resultSetCust.getInt(1);
+            while (rs.next()){
+                resultCust=rs.getInt(1);
             }
-            ResultSet resultSetEmp = stm.executeQuery(checkEmployees);
+            rs = DataBase.getResultSet(checkEmployees);
             int resultEmp = 0;
-            while (resultSetEmp.next()){
-                resultEmp=resultSetEmp.getInt(1);
+            while (rs.next()){
+                resultEmp=rs.getInt(1);
             }
-            if (resultCust>0){
-                resultSetCust=stm.executeQuery(forChoiceBoxCustomers);
-                while (resultSetCust.next()){
-                    employeesLists.add(resultSetCust.getInt(1));
+            if (resultCust>0){//IF DELETED PERSON GOT CUSTOMERS
+                rs=DataBase.getResultSet(forChoiceBoxCustomers);
+                while (rs.next()){
+                    employeesLists.add(rs.getInt(1));
                 }
-                ChoiceDialog<Integer> newEmpChoice=new ChoiceDialog<>(null,employeesLists);
-                newEmpChoice.setTitle("Choice New Employee For Customers");
-                newEmpChoice.setHeaderText("WARNING,This Employee has customers, choice new employee in his office for them");
 
-                Optional<Integer> result = newEmpChoice.showAndWait();
+                /*
+                Choice box Alert
+                */
+                Integer choiceAlertResult=Alerts.choiceDialogAlertInteger(employeesLists,"TRANSFER CUSTOMERS","Choice New Employee For Customers","WARNING,This Employee has customers,\n Choice new employee in his office for them");
 
-                String updateCustomers="update customers set salesRepEmployeeNumber="+result.get()+" where salesRepEmployeeNumber= " +employee.getEmployeeNumber();
-                int updateCus=stm.executeUpdate(updateCustomers);
-                Alert updateInfo=new Alert(Alert.AlertType.INFORMATION);
-                updateInfo.setHeaderText("Successful");
-                updateInfo.setContentText("Employee Update For Customers Completed");
-                if (result.get() !=0)
+                if (choiceAlertResult!=0){
+                    //now transfer this customers to other customers
+                String updateCustomers="update customers set salesRepEmployeeNumber="+choiceAlertResult+" where salesRepEmployeeNumber= " +employee.getEmployeeNumber();
+                DataBase.updateSelect(updateCustomers);
+                Alerts.throwInfoAlert("Successful",null,"Employee Update For Customers Completed");
                 delete(employee.getEmployeeNumber());
+                }
 
-            }
+            }//IF DELETED PERSON IS MANAGER
             else if (resultEmp>0){
-                ResultSet rs=stm.executeQuery(forChoiceBoxManager);
+                rs=DataBase.getResultSet(forChoiceBoxManager);
                 while (rs.next()) {
                     employeesLists.add(rs.getInt(1));
                 }
-                ChoiceDialog<Integer> newManagerChoice=new ChoiceDialog<>(null,employeesLists);
-                newManagerChoice.setTitle("Choice New Manager");
-                newManagerChoice.setHeaderText("WARNING,This employee - "+employee.getEmployeeNumber()+" is manager,Choice new manager from them");
-                newManagerChoice.setContentText(employee.getEmployeeNumber()+"'s Employees :");
-                Optional<Integer> resultOfChoice = newManagerChoice.showAndWait();
-                String forUpdateManager="update employees set reportsTo="+resultOfChoice.get()+" where reportsTo="+employee.getEmployeeNumber();
-                String updateJob="update employees set jobTitle="+"'"+employee.getJobTitle()+"'"+" where employeeNumber="+resultOfChoice.get();
-                int result=stm.executeUpdate(forUpdateManager);
-                result=result+stm.executeUpdate(updateJob);
-                System.out.println(result);
-                Alert updateInfo=new Alert(Alert.AlertType.INFORMATION);
-                updateInfo.setHeaderText("Successful");
-                updateInfo.setContentText("Employee Update For Customers Completed");
-                if (resultOfChoice.get()!=0)
+                Integer newManagerChoice=Alerts.choiceDialogAlertInteger(employeesLists,"Choice New Manager",
+                                  "WARNING,This employee - "+employee.getEmployeeNumber()+" is manager," +
+                                " \n Choice new manager from them",employee.getEmployeeNumber()+"'s Employees :");
+                String forUpdateManager="update employees set reportsTo="+newManagerChoice+" where reportsTo="+employee.getEmployeeNumber();
+                String updateJob="update employees set jobTitle="+"'"+employee.getJobTitle()+"'"+" where employeeNumber="+newManagerChoice;
+
+                DataBase.updateSelect(forUpdateManager);
+                DataBase.updateSelect(updateJob);
+
+                Alerts.throwInfoAlert("Successful",null,"Employee Update For Customers Completed");
+
+                if (newManagerChoice!=0)
+
                 delete(employee.getEmployeeNumber());
             }else delete(employee.getEmployeeNumber());
 
@@ -242,11 +248,7 @@ public class ProfileController implements Initializable {
     private static void delete(int EmpId){
        try {
            String DelQuery = "delete from employees where employeeNumber=" + EmpId;
-           DataBase db = new DataBase();
-           Connection cn = db.getConnections();
-           Statement stm = cn.createStatement();
-
-           int delCount=stm.executeUpdate(DelQuery);
+           DataBase.updateSelect(DelQuery);
            Alert updateInfo=new Alert(Alert.AlertType.INFORMATION);
            updateInfo.setHeaderText("Successful");
            updateInfo.setContentText("Delete Completed successfully");
