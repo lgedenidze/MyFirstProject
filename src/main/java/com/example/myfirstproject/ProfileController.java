@@ -1,20 +1,18 @@
 package com.example.myfirstproject;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.chart.PieChart;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
 
-import java.io.IOException;
 import java.net.URL;
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class ProfileController implements Initializable {
@@ -70,6 +68,8 @@ public class ProfileController implements Initializable {
     Page page=new Page();
     Employee employee=page.getSelectedEmployee();
 
+    @FXML
+    Button deleteEmployeeButton;
 
 
         ObservableList<Customers> customersObservableList= FXCollections.observableArrayList();
@@ -78,9 +78,10 @@ public class ProfileController implements Initializable {
 
         try{
             String query="SELECT salesRepEmployeeNumber,customerNumber,customerName,contactFirstName,contactLastName,city,phone FROM  customers where salesRepEmployeeNumber="+employee.getEmployeeNumber();
-            String jobQuery = "select\n" +
-                    "jobtitle\n" +
-                    "from jobs where jobTitle not in ('Sales Rep','President') order by 1 desc";
+            String jobQuery = """
+                    select
+                    jobtitle
+                    from jobs where jobTitle not in ('Sales Rep','President') order by 1 desc""";
             ObservableList<String> jobsObsList=FXCollections.observableArrayList();
             ResultSet emp=DataBase.getResultSet(query);
             while (emp.next()){
@@ -155,25 +156,21 @@ public class ProfileController implements Initializable {
 
     public void editManager() {
         try {
-            DataBase db=new DataBase();
-            Connection cn=db.getConnections();
-            Statement stm=cn.createStatement();
+
             int managerIdForUp=managerIdChoiceBox.getValue();
             String changeManagerQuery="update employees set reportsTo="+managerIdForUp+" where employeeNumber="+"'"+employee.getEmployeeNumber()+"'";
             String getOffice="select officeCode from employees where employeeNumber="+managerIdForUp;
             int officeCode=0;
-            int upManager=stm.executeUpdate(changeManagerQuery);
-            ResultSet rs=stm.executeQuery(getOffice);
+            DataBase.updateSelect(changeManagerQuery);
+            ResultSet rs=DataBase.getResultSet(getOffice);
             while (rs.next()){
                 officeCode=rs.getInt(1);
             }
             String changeOffice="update employees set officeCode="+officeCode+" where " +
                     "employeeNumber="+employee.getEmployeeNumber();
-            int upOffice=stm.executeUpdate(changeOffice);
-            Alert alert=new Alert(Alert.AlertType.INFORMATION);
-            alert.setHeaderText("Successful");
-            alert.setContentText("Manager Update Completed");
-            alert.show();
+            DataBase.updateSelect(changeOffice);
+            Alerts.throwInfoAlert("Successful",null,"Manager Update Completed");
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -236,35 +233,43 @@ public class ProfileController implements Initializable {
                 if (newManagerChoice!=0)
 
                 delete(employee.getEmployeeNumber());
-            }else delete(employee.getEmployeeNumber());
+                Stage stage = (Stage) deleteEmployeeButton.getScene().getWindow();
+                stage.close();
+            }else{ delete(employee.getEmployeeNumber()
+            );
+                Stage stage = (Stage) deleteEmployeeButton.getScene().getWindow();
+                stage.close();
+            }
 
 
         }catch (Exception e){
             e.printStackTrace();
-        };
+        }
 
 
-    }
+}
     private static void delete(int EmpId){
        try {
+
            String DelQuery = "delete from employees where employeeNumber=" + EmpId;
            DataBase.updateSelect(DelQuery);
-           Alert updateInfo=new Alert(Alert.AlertType.INFORMATION);
-           updateInfo.setHeaderText("Successful");
-           updateInfo.setContentText("Delete Completed successfully");
-           updateInfo.show();
+           Alerts.throwInfoAlert("Successful",null,"Delete Completed successfully");
            StartProgram.setRoot("WelcomePage");
        }catch (Exception e){
            e.printStackTrace();
        }
     }
 
-@FXML
-    public void signOut () throws IOException {
-        StartProgram.signOut();
+    public void editJob() throws SQLException {
+        if (jobChoice.getValue().equals(employee.getJobTitle())){
+            Alerts.warningInfoAlert("Change job",null,"Please select new job if you \n want to change employee job");
+        }else {
+            String updateJobQuery = "update employees set jobTitle=" + "'" + jobChoice.getValue() + "'" +
+                    " " + " where employeenumber=" + employee.getEmployeeNumber();
+            DataBase.updateSelect(updateJobQuery);
+            Alerts.throwInfoAlert("Successful",null,"Employee Job Changed to "+jobChoice.getValue());
+        }
+
     }
-    @FXML
-    public void goBack() throws Exception{
-        StartProgram.setRoot("WelcomePage");
-    }
+
 }

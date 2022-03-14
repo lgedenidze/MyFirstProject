@@ -7,6 +7,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.paint.Color;
 
+import java.io.IOException;
 import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -101,10 +102,13 @@ public class AddEmployeeController implements Initializable {
                 emailTextField.setText(" ");
                 firstNameTextField.setText(" ");
                 lastNameTextField.setText(" ");
+                StartProgram.setRoot("WelcomePage");
             } catch (SQLException e) {
                 e.printStackTrace();
-                resultLabel.setText("Add Procedure Failed");
-                resultLabel.setTextFill(Color.RED);
+                Alerts.errorInfoAlert("Error",null
+                        ,"Some fildes are empty \nPlease Fix It");
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
 

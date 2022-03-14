@@ -3,6 +3,7 @@ package com.example.myfirstproject;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ChoiceDialog;
+import javafx.stage.Modality;
 import javafx.stage.StageStyle;
 
 import java.util.Optional;
@@ -15,7 +16,8 @@ public class Alerts {
         alert.setHeaderText(headerText);
         alert.setContentText(contextText);
         alert.initStyle(StageStyle.UTILITY);
-        alert.show();
+        alert.initModality(Modality.APPLICATION_MODAL);
+        alert.showAndWait();
     }
 
     public static void warningInfoAlert(String title,String headerText, String contextText) {
@@ -24,7 +26,8 @@ public class Alerts {
         alert.setHeaderText(headerText);
         alert.setContentText(contextText);
         alert.initStyle(StageStyle.UTILITY);
-        alert.show();
+        alert.initModality(Modality.APPLICATION_MODAL);
+        alert.showAndWait();
     }
 
     public static void errorInfoAlert(String title,String headerText, String contextText) {
@@ -33,7 +36,8 @@ public class Alerts {
         alert.setHeaderText(headerText);
         alert.setContentText(contextText);
         alert.initStyle(StageStyle.UTILITY);
-        alert.show();
+        alert.initModality(Modality.APPLICATION_MODAL);
+        alert.showAndWait();
     }
 
     public static Alert confirmAlert(String title,String headerText, String contextText) {
@@ -42,7 +46,8 @@ public class Alerts {
         alert.setHeaderText(headerText);
         alert.setContentText(contextText);
         alert.initStyle(StageStyle.UTILITY);
-        alert.show();
+        alert.initModality(Modality.APPLICATION_MODAL);
+        alert.showAndWait();
         return  alert;
         /*This Is how to use alert
         Optional<ButtonType> result = alert.showAndWait();
@@ -63,6 +68,7 @@ public class Alerts {
         alert.setHeaderText(headerText);
         alert.setContentText(contextText);
         alert.initStyle(StageStyle.UTILITY);
+        alert.initModality(Modality.APPLICATION_MODAL);
         Optional<String> result = alert.showAndWait();
 
         return result.isEmpty()? null : result.get();

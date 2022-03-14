@@ -30,7 +30,6 @@
 
 .table-view .column-header-background .filler {
     -fx-background-color: #3b2f2f;
-     -fx-text-fill: #3b2f2f;
 
 }
 .table-view .corner {
@@ -50,7 +49,7 @@
 }
 
 .label{
-  -fx-font-family: "Serif";
+  -fx-font-family: "sansserif";
   -fx-text-fill: #f1f3f2;
 }
 #textarea{

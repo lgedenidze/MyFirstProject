@@ -241,4 +241,6 @@ public class Page implements Initializable {
         Stage stage=StartProgram.newPage("AddEmployee","Add New Employee");
         stage.setResizable(false);
     }
+
+
 }
